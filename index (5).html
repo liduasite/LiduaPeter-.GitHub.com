@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lidua | Web Developer</title>
+<style>
+:root{
+  --color-primary:#0077ff;
+  --color-primary-dark:#0056cc;
+  --color-accent:#ff5ef7;
+  --color-text:#1f2333;
+  --color-text-muted:#5b6072;
+  --color-bg:#f7f7fb;
+  --color-surface:#fff;
+  --color-border:#e7e7f0;
+  --font-heading:'Segoe UI',sans-serif;
+  --font-body:'Segoe UI',sans-serif;
+  --radius:14px;
+  --shadow:0 6px 20px rgba(31,35,51,0.08);
+  --shadow-hover:0 12px 30px rgba(31,35,51,0.14);
+}
+body.dark{
+  --color-text:#e0e0ff;
+  --color-text-muted:#a0a3b8;
+  --color-bg:#0f0f1a;
+  --color-surface:#1a1a2e;
+  --color-border:#2a2a3e;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{ background-color:var(--color-bg); color:var(--color-text); font-family:var(--font-body); line-height:1.6; transition:0.3s; }
+.container{max-width:1100px; margin:0 auto; padding:0 20px;}
+section{padding:70px 20px;}
+h1,h2,h3{font-family:var(--font-heading); color:var(--color-text);}
+h2{text-align:center; font-size:2rem; margin-bottom:40px; position:relative;}
+h2::after{content:""; display:block; width:60px; height:4px;background: var(--color-primary); border-radius:2px; margin:12px auto 0;}
+
+/* SCROLL ANIMATION - THIS WAS MISSING */
+.fade-in{
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.8s ease-out;
+}
+.fade-in.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card, .education-card{
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease-out;
+}
+.project-card.show, .education-card.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HEADER */
+header{ background-color:var(--color-surface); border-bottom:1px solid var(--color-border); position:sticky; top:0; z-index:100; }
+.header-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 20px;}
+header h1{color:var(--color-primary); font-size:1.4rem;}
+nav a{color:var(--color-text); text-decoration:none; font-weight:500; margin-left:24px; transition:0.2s;}
+nav a:hover{color:var(--color-primary);}
+#themeBtn{background:none; border:2px solid var(--color-primary); color:var(--color-primary); padding:8px 14px; border-radius:999px; cursor:pointer; font-weight:600;}
+#menuButton{display:none; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--color-text);}
+
+/* BUTTONS */
+.btn{display:inline-block; padding:12px 28px; border-radius:999px; font-weight:600; text-decoration:none; cursor:pointer; border:none; box-shadow:var(--shadow); transition:0.2s;}
+.btn:hover{transform:translateY(-2px); box-shadow:var(--shadow-hover);}
+.btn-primary{background-color:var(--color-primary); color:#fff;}
+.btn-primary:hover{background-color:var(--color-primary-dark);}
+
+/* HERO */
+#home{text-align:center; padding:100px 20px;}
+#home h1{font-size:2.5rem; margin-bottom:10px;}
+#home p{color:var(--color-text-muted); margin-bottom:30px;}
+
+/* ABOUT */
+.about{display:flex; gap:60px; align-items:center; justify-content:center; flex-wrap:wrap;}
+.about-text{flex:1 1 400px;}
+.about-text h2{text-align:left;}
+.about-text h2::after{margin:12px 0 0;}
+.about-image img{width:220px; height:220px; border-radius:50%; object-fit:cover; border:6px solid var(--color-surface); box-shadow:var(--shadow);}
+
+/* SKILLS */
+#skills ul{list-style:none; display:flex; flex-wrap:wrap; justify-content:center; gap:14px;}
+#skills li{background-color:var(--color-surface); border:1px solid var(--color-border); padding:10px 22px; border-radius:999px; box-shadow:var(--shadow); transition:0.2s;}
+#skills li:hover{transform:translateY(-3px); box-shadow:var(--shadow-hover); color:var(--color-primary);}
+
+/* PROJECTS + EDUCATION */
+.projects, .educations{display:flex; gap:24px; flex-wrap:wrap; justify-content:center;}
+.project-card, .education-card{ flex:1 1 260px; max-width:320px; background-color:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow); transition:0.3s; position:relative; }
+.project-card:hover, .education-card:hover{transform:translateY(-6px); box-shadow:var(--shadow-hover); border-color:var(--color-primary);}
+.project-number{ position:absolute; top:-18px; left:24px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:var(--color-accent); color:#fff; font-weight:700; border-radius:50%; box-shadow:var(--shadow); }
+
+/* CONTACT */
+.contact-option{display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin-top:30px;}
+.contact-card{flex:1 1 260px; max-width:320px; background-color:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius); padding:30px 26px; box-shadow:var(--shadow); text-align:center;}
+#sayHiForm{display:flex; flex-direction:column; gap:12px; margin-top:15px;}
+#sayHiForm input{padding:12px 16px; border-radius:999px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1rem;}
+#sayHiForm input:focus{outline:none; border-color:var(--color-primary);}
+
+/* FOOTER */
+footer{text-align:center; padding:30px 20px; background-color:var(--color-surface); border-top:1px solid var(--color-border);}
+
+/* BACK TO TOP */
+#backToTop{ position:fixed; right:24px; bottom:24px; width:48px; height:48px; border:none; border-radius:50%; background-color:var(--color-primary); color:#fff; font-size:1.3rem; cursor:pointer; box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:0.25s; }
+#backToTop.show{opacity:1; visibility:visible; transform:translateY(0);}
+
+#helloButton{ background: #100720; color: #fff; position: relative; box-shadow: 0 0 20px var(--color-accent); }
+#helloButton::after{ content: ""; position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,94,247,1) 0%, rgba(0,119,255,1) 100%); filter: blur(15px); z-index: -1; border-radius: 999px; }
+
+/* MOBILE */
+@media (max-width:700px){
+  .about{flex-direction:column; text-align:center;}
+  .about-text h2{text-align:center;}
+  .about-text h2::after{margin:12px auto 0;}
+  #menuButton{display:block;}
+  nav{display:none; position:absolute; top:100%; left:0; right:0; background:var(--color-surface); flex-direction:column; padding:20px; border-bottom:1px solid var(--color-border);}
+  nav.open{display:flex;}
+  nav a{margin:10px 0;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner container">
+    <h1>LD Portfolio</h1>
+    <button id="menuButton">☰</button>
+    <nav id="navMenu">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button id="themeBtn">🌙 Dark</button>
+  </div>
+</header>
+
+<section id="home" class="container">
+  <h1 id="message">HELLO EVERYONE 🤓</h1>
+  <p>Future Web Developer from Bauchi</p>
+  <button id="helloButton" class="btn btn-primary">Say Hello</button>
+  <button id="changeButton" class="btn">Change Message</button>
+</section>
+
+<section id="about" class="container fade-in">
+  <div class="about">
+    <div class="about-text">
+      <h2>About Me</h2>
+      <p>My name is Lidua Peter Gaius and I am a student of Harmony High School Bauchi State. I build websites and create videos.</p>
+      <ul style="margin-top:15px; color:var(--color-text-muted);">
+        <li>I enjoy creating websites and playing basketball</li>
+        <li>Goal: Become a web developer and computer science professional</li>
+        <li>Learning to build for my community and for innovation</li>
+      </ul>
+    </div>
+    <div class="about-image">
+      <img src="a.jpg" alt="Lidua" />
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="container fade-in">
+  <h2>My Skills</h2>
+  <ul>
+    <li>HTML & CSS</li>
+    <li>JavaScript</li>
+    <li>Python</li>
+    <li>AI & Robotics</li>
+    <li>Content Creation</li>
+  </ul>
+</section>
+
+<section id="education" class="container fade-in">
+  <h2>My Education</h2>
+  <div class="educations">
+    <div class="education-card">
+      <h3>Primary School</h3>
+      <p>Police Children School Bauchi. Learned to calculate and build discipline.</p>
+    </div>
+    <div class="education-card">
+      <h3>Secondary School</h3>
+      <p>Harmony High School Bauchi. Learned leadership and excellence.</p>
+    </div>
+    <div class="education-card">
+      <h3>STARTUP BAUCHI ✨</h3>
+      <p>Learned: Web Dev, AI, Content Creation, Computers. Building the next generation of tech pros.</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="container fade-in">
+  <h2>My Projects</h2>
+  <div class="projects">
+    
+    <div class="project-card">
+      <span class="project-number">1</span>
+      <h3>Portfolio Website</h3>
+      <p>This website! Built with HTML, CSS, and JavaScript with dark mode + scroll animations.</p>
+    </div>
+
+    <div class="project-card">
+      <span class="project-number">2</span>
+      <h3>AI Study Bot</h3>
+      <p>Python bot that predicts exam scores based on study hours using machine learning.</p>
+    </div>
+
+    <div class="project-card">
+      <span class="project-number">3</span>
+      <h3>Login System</h3>
+      <p>Secure login page connected to my portfolio. Validates username and password.</p>
+    </div>
+
+    <div class="project-card">
+      <span class="project-number">4</span>
+      <h3>Bauchi Community Website</h3>
+      <p>Website for Startup Bauchi students to share projects and connect. Made with HTML/CSS.</p>
+    </div>
+
+    <div class="project-card">
+      <span class="project-number">5</span>
+      <h3>Video Editing Portfolio</h3>
+      <p>Collection of short videos and edits I made. Focus on storytelling and effects.</p>
+    </div>
+
+    <div class="project-card">
+      <span class="project-number">6</span>
+      <h3>Coming Soon 🚀</h3>
+      <p>AI Chatbot for Harmony High School. In progress with Python and AI.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact" class="container fade-in">
+  <h2>Contact Me</h2>
+  <div class="contact-option">
+    <div class="contact-card">
+      <h3>Email</h3>
+      <p>Prefer email? Reach me directly</p>
+      <a href="mailto:liduapetergaius@gmail.com" class="btn btn-primary">Send Email</a>
+    </div>
+    <div class="contact-card">
+      <h3>Say Hi</h3>
+      <form id="sayHiForm">
+        <input type="text" id="visitorName" placeholder="Your name" required>
+        <button type="submit" class="btn btn-primary">Say Hi 👋</button>
+        <p id="formResponse" style="color:var(--color-primary); font-weight:600;"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>©2026 Lidua. All rights reserved</p>
+  <button id="backToTop">⇧</button>
+</footer>
+
+<script>
+// DARK MODE TOGGLE
+const themeBtn = document.getElementById("themeBtn");
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  themeBtn.innerText = document.body.classList.contains("dark") ? "☀️ Light" : "🌙 Dark";
+});
+
+// BUTTONS
+document.getElementById("helloButton").addEventListener("click", () => {
+  alert("Hello welcome to my website")
+});
+document.getElementById("changeButton").addEventListener("click", () => {
+  document.getElementById("message").textContent = "Thank you for visiting my website 😊"
+});
+
+// MOBILE MENU
+const menuButton = document.getElementById("menuButton");
+const navMenu = document.getElementById("navMenu");
+menuButton.addEventListener("click", () => navMenu.classList.toggle("open"));
+navMenu.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => navMenu.classList.remove("open"));
+});
+
+// BACK TO TOP
+const backToTop = document.getElementById("backToTop");
+window.addEventListener("scroll", () => {
+  if(window.scrollY > 300){backToTop.classList.add("show")} 
+  else{backToTop.classList.remove("show")}
+});
+backToTop.addEventListener("click", () => window.scrollTo({top:0, behavior:"smooth"}));
+
+// SCROLL ANIMATION JS WITH DELAY
+const faders = document.querySelectorAll(".fade-in, .project-card, .education-card");
+const appearOptions = { threshold: 0.15 };
+const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll){
+  entries.forEach((entry, index) => {
+    if(!entry.isIntersecting){ return; }
+    else{
+      setTimeout(() => {
+        entry.target.classList.add("show");
+      }, index * 150);
+      appearOnScroll.unobserve(entry.target);
+    }
+  });
+}, appearOptions);
+faders.forEach(fader => { appearOnScroll.observe(fader); });
+
+// FORM
+document.getElementById("sayHiForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("visitorName").value;
+  document.getElementById("formResponse").textContent = "Thank you for saying Hi, " + name + " 🤓";
+  e.target.reset();
+});
+</script> <!-- THIS WAS MISSING -->
+</body>
+</html>
